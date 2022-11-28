@@ -10,7 +10,6 @@ def rotate(s):
     return s[1:] + s[0]
 
 def find_min_operations(letter_display): # returns (mininimum number of operations to create the letter display, number of ways to achieve this minimum)
-
     arr = [(0, '')]
     heapq.heapify(arr)
     seen = {}
@@ -35,7 +34,6 @@ def find_min_operations(letter_display): # returns (mininimum number of operatio
             add_to_arr(num_operations + 1, swap(string), count[(num_operations, string)])
         if len(string) >= 2:
             add_to_arr(num_operations + 1, rotate(string), count[(num_operations, string)])
-    
     return num_operations, count[(num_operations, string)]
 
 # question 3a
