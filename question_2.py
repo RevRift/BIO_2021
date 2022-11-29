@@ -9,7 +9,6 @@ class Board: # contains a dictionary of filled triangles {position of triangle: 
 
     def place_triangle(self, triangle_pos, number): # places triangle and updates top left triangle
         self.triangles[triangle_pos] = Triangle(triangle_pos[0], triangle_pos[1], number)
-
         if (triangle_pos[1], triangle_pos[0]) < (self.top_left_triangle.pos[1], self.top_left_triangle.pos[0]):
             self.top_left_triangle = self.triangles[triangle_pos]
     
@@ -85,23 +84,17 @@ class Player:
 
     def move(self): # moves the player 'max_traversals' edges clockwise around perimeter
         pos_adjacent_to_original_triangle = self.triangle.get_adjacent_triangle_pos(self.edge_type)
-
         for m in range(self.max_traversals):
             self.traverse()
-            if self.num_of_ways_to_score(self.adjacent_triangle_pos) >= 1: break
-        
+            if self.num_of_ways_to_score(self.adjacent_triangle_pos) >= 1: break    
         board.place_triangle(pos_adjacent_to_original_triangle, self.number)
         self.score += self.num_of_ways_to_score(pos_adjacent_to_original_triangle)
     
     def num_of_ways_to_score(self, triangle_pos): # finds number of ways to score by placing a triangle of your number at this position
         directions_to_other_two_triangles = ( # if the triangle at triangle_pos points up
-            ((1, -1), (2, 0)), # if the triangle at triangle_pos will beat the bottom left in the scoring pattern (remember i've defined down as the positive y direction)
-            ((-1, -1), (-2, 0)), # bottom right
-            ((1, 1), (-1, 1)) # top
+            ((1, -1), (2, 0)), ((-1, -1), (-2, 0)), ((1, 1), (-1, 1))
         ) if (triangle_pos[0] % 2 == triangle_pos[1] % 2) else ( # if the triangle points down
-            ((2, 0), (1, 1)), # top left
-            ((-2, 0), (-1, 1)), # top right
-            ((1, -1), (-1, -1)) # bottom
+            ((2, 0), (1, 1)), ((-2, 0), (-1, 1)), ((1, -1), (-1, -1))
         )
         count = 0
         for (d1, d2), (d3, d4) in directions_to_other_two_triangles:
@@ -116,7 +109,6 @@ class Player:
             self.edge_type = 1 if self.triangle.points_up else 2
             self.adjacent_triangle_pos = self.triangle.get_adjacent_triangle_pos(self.edge_type)
         
-
 num_of_players, num_of_moves = map(int, input().split())
 base = Triangle(0, 0, 0) # parameters: x, y, number
 board = Board({base.pos: base}) # parameter: dictionary of triangles
